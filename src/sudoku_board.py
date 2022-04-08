@@ -152,7 +152,7 @@ class SudokuBoard:
             self.__board[row][column].clear_notes()
 
             # Column
-            for slot in self.get_slots_in_column(column):
+            for slot in self.get_slots_in_column(column):                
                 slot.remove_note(number)
 
             # Pod
@@ -162,7 +162,66 @@ class SudokuBoard:
             # Row
             for slot in self.get_slots_in_row(row):
                 slot.remove_note(number)
-            
 
+            # Was set
+            return True
+
+        # Was not set
+        return False
+            
+    
+    def solve(self):
+        """
+        """
+
+        # We go row by row, checking on notes.
+        for row in range(0, 9):
+            for column in range(0, 9):
+
+                slot = self.get_slot(row, column)
+                slot_notes = slot.get_notes()     
+
+                # First off, do we only have a single note?
+                if len(slot_notes) == 1:
+                    self.set_number_in_slot(row, column, slot_notes[0])
+                    print(f"[{row}, {column}] set to {slot_notes[0]} since it is the only note.")
+                    return True           
+
+                # Pod Note Comparison, we want to see what number exists in only one note set
+                pod_slot_notes = list(slot_notes)
+                for slot_other in self.get_slots_in_pod(self.get_pod(row, column)):
+                    if slot != slot_other:
+                        pod_slot_notes.extend(slot_other.get_notes())
+                
+                if len(pod_slot_notes) == 1:
+                    self.set_number_in_slot(row, column, pod_slot_notes[0])
+                    print(f"[{row}, {column}] set to {pod_slot_notes[0]} since after comparison it is the only note.")
+                    return True
+
+                # Column Note Comparison 
+                column_slot_notes = list(slot_notes)
+                for slot_other in self.get_slots_in_column(column):
+                    if slot != slot_other:
+                        column_slot_notes.extend(slot_other.get_notes())
+                
+                if len(pod_slot_notes) == 1:
+                    self.set_number_in_slot(row, column, pod_slot_notes[0])
+                    print(f"[{row}, {column}] set to {pod_slot_notes[0]} since after comparison it is the only note.")
+                    return True
+
+                # Row Note Comparison 
+                row_slot_notes = list(slot_notes)
+                for slot_other in self.get_slots_in_row(row):
+                    if slot != slot_other:
+                        row_slot_notes.extend(slot_other.get_notes())
+                
+                if len(pod_slot_notes) == 1:
+                    self.set_number_in_slot(row, column, pod_slot_notes[0])
+                    print(f"[{row}, {column}] set to {pod_slot_notes[0]} since after comparison it is the only note.")
+                    return True
+
+                
+
+        return False
 
 
