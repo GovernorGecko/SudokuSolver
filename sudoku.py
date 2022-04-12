@@ -4,6 +4,7 @@
 
 
 from src.sudoku_board import SudokuBoard
+from src.advanced.x_wing import x_wing_solver
 
 #pods
 #rows
@@ -86,3 +87,5 @@ print(sudoku_board)
 while(sudoku_board.solve()):
     print("\n")
     print(sudoku_board)
+
+print(x_wing_solver(sudoku_board, 0, 0))
